@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1609761800 source:f:\code block\mmtapplication\main.c
+1609863156 source:f:\code block\mmtapplication\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -10,5 +10,5 @@
 
 1609578864 f:\code block\mmtapplication\struct.h
 
-1609604098 f:\code block\mmtapplication\util.h
+1609843422 f:\code block\mmtapplication\util.h
 

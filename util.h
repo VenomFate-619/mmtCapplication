@@ -72,6 +72,35 @@ void copyItem(char to[100],char from[100])
     to[i]='\0';
 }
 
+void entryOfPassword(char *p)
+{
+     int i=0;
+        pf("\nEnter the password(min 6 characters): ");
+        while( 1 )
+        {
+            char ch=getch();
+            if( ch == 13)
+            {
+                p[i]='\0';
+                break;
+            }
+            else if( ch == 8)
+            {
+                i--;
+                printf("\b \b");
+            }
+            else if( ch == 9 || ch== 32 )
+            {
+                continue;
+            }
+            else
+            {
+                p[i]=ch;
+                i++;
+                printf("*");
+            }
+        }
+}
 
 
 

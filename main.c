@@ -5,9 +5,13 @@
 #include<ctype.h>
 #include<time.h>
 #include "util.h"
+#include "stack.h"
 #define pf printf
 #define sf scanf
 
+extern struct stack
+
+int bool=0;
 struct  User
 {
     char email[30];
@@ -18,19 +22,30 @@ struct  User
     struct User *next;
 }*head=NULL;
 
+struct Train{
+    int trainNo;
+    char source[30];
+    char destination[30];
+    char day[30];
+    int noOfAvailableSeats;
+    int availableSeats[100];
+}*headTrain=NULL;
+
 void menu();
 void registerUser();
 void login();
+void viewTrainList();
+
 
 
 void menu()
 {
     int choice;
-  // system("cls");
+    system("cls");
     system("color 9");
     printf("\n\n\t\t\tMake my trip fast");
     printf("\n\n\n\t\t\t\xB2\xB2\xB2\xB2\xB2\xB2\xB2 WELCOME TO THE MAIN MENU \xB2\xB2\xB2\xB2\xB2\xB2\xB2");
-    printf("\n\n\t\t1.Create new account\n\t\t2.View \n\t\t3.Book a train\n\t\t4.Check the details of existing account\n\t\t5.Removing existing account\n\t\t6.View customer's list\n\t\t7.Exit\n\n\n\n\n\t\t Enter your choice:");
+    printf("\n\n\t\t1.Create new account\n\t\t2.View \n\t\t3.Login\n\t\t4.Check the details of existing account\n\t\t5.Removing existing account\n\t\t6.View customer's list\n\t\t7.Exit\n\n\n\n\n\t\t Enter your choice:");
     scanf("%d",&choice);
     switch(choice)
     {
@@ -42,6 +57,14 @@ void menu()
     case 2:
         view();
         break;
+    case 3:
+        login();
+        system("cls");
+        menu();
+    case 4:
+        viewTrainList();
+        system("cls");
+        menu();
     default:
         exit(1);
     }
@@ -58,7 +81,7 @@ void view()
 // TODO (AnyOne#1#): Add remaing items
         {
 
-            pf("\n %s \n",p->name);
+            pf("\n %s \n",p->email);
 //            pf("\n %s \n",p->email);
             //pf("\n %s \n",p->mobileNo);
             p=p->next;
@@ -84,9 +107,51 @@ void addUser(struct User *newUser)
     }
 }
 
+int findUserByEmail(char email[100])
+{
+    struct User*u=head;
+    if(head==NULL)
+    {
+        return NULL;
+    }
+    else
+    {
+        while(u!=NULL)
+        {
+            if(strcmp(u->email,email)==0)
+            {
+                return 1;
+            }
+            u=u->next;
+        }
+        return 0;
+    }
+}
+int check(char *e,char *p)
+{
+    struct User *u=head;
+    if(head==NULL)
+    {
 
+        pf("Email is not register\n");
+        return 0;
+    }
+    else
+    {
+        pf(" %s %s ",e,p);
+        while(u!=NULL)
+        {
+            if(strcmp(e,u->email)==0 || strcmp(p,u->password)==0)
+            {
+                return 1;
+            }
+            u=u->next;
+        }
+        pf("Email or password is incorrect\n");
+        return 0;
 
-
+    }
+}
 void extractUsersFromFile()
 {
     FILE *user_ptr;
@@ -146,7 +211,7 @@ void extractUsersFromFile()
             }
             else
             {
-                pf(" working ");
+
                 user=(struct User*)malloc(sizeof(struct User));
                 if(user==NULL)
                 {
@@ -175,92 +240,55 @@ void registerUser()
     char userEmail[100];
     char userPassword[100];
     char confirmPassword[100];
-    char mobileNo[10];
+    char mobileNo[12];
     pf("Enter your Details :)\n");
     pf("Enter the name: ");
     sf(" %[^\n]",userName);
 //    pf("%s",userName);
 //    email
+getemail:
     do
     {
         printf("Enter the email: ");
         scanf(" %[^\n]",userEmail);
     }
     while(!emailVerify(userEmail));
-//    Uncomment it,it is necessary
+
+    if(findUserByEmail(userEmail))
+    {
+        pf("email already register ");
+        goto getemail;
+    }
+
+
 //    mobile number
     do
     {
+
         printf("Enter the mobile number: ");
         scanf("%s",mobileNo);
     }
     while(!numberVerify(mobileNo));
 
+
+
+
 //    password
 
     do
     {
-        int i=0;
-        pf("Enter the password(min 6 characters): ");
-        while( 1 )
-        {
-            char ch=getch();
-            if( ch == 13)
-            {
-                userPassword[i]='\0';
-                break;
-            }
-            else if( ch == 8)
-            {
-                i--;
-                printf("\b \b");
-            }
-            else if( ch == 9 || ch== 32 )
-            {
-                continue;
-            }
-            else
-            {
-                userPassword[i]=ch;
-                i++;
-                printf("*");
-            }
-        }
+        entryOfPassword(userPassword);
     }
     while(!passwordVerify(userPassword));
 
 
+
 // confirm password
-// TODO (AnyOne#1#): REFRACTOR  THE PASSWORD ENTRY CODE IN UTIL.H
+
 
     do
     {
-        int i=0;
-        pf("\nConfirm the password: ");
-        while( 1 )
-        {
-            char ch=getch();
-            if( ch == 13)
-            {
-                confirmPassword[i]='\0';
-                break;
-            }
-            else if( ch == 8)
-            {
-                i--;
-                printf("\b \b");
-            }
-            else if( ch == 9 || ch== 32 )
-            {
-                continue;
-            }
-            else
-            {
-                confirmPassword[i]=ch;
-                i++;
-                printf("*");
-            }
-        }
+        entryOfPassword(confirmPassword);
     }
     while(!passwordMatch(userPassword,confirmPassword) );
 
@@ -278,10 +306,10 @@ void registerUser()
     }
 
 // coping data
-    copyItem(newUser->email,userEmail);
-    copyItem(newUser->name,userName);
-    copyItem(newUser->password,userPassword);
-    copyItem(newUser->mobileNo,mobileNo);
+    strcpy(newUser->email,userEmail);
+    strcpy(newUser->name,userName);
+    strcpy(newUser->password,userPassword);
+    strcpy(newUser->mobileNo,mobileNo);
 
 
 
@@ -304,7 +332,44 @@ void registerUser()
     }
 }
 
+void login()
+{
+    char userEmail[30];
+    char userPassword[30];
+    do
+    {
+        pf("Email: ");
+        sf("%s",userEmail);
+        pf("Password: ");
+        sf("%s",userPassword);
+    }
+    while(!check(userEmail,userPassword));
+    bool=1;
 
+}
+
+
+
+void viewTrainList()
+{
+    char source[30];
+    char destination[30];
+    char day[30];
+    struct Train *t;
+    t=headTrain;
+    while(t!=NULL)
+    {
+        pf("=============================================\n");
+        pf("%d %s to %s on %s available seats are %d\n",t->trainNo,t->source,t->destination,t->day,t->noOfAvailableSeats);
+        pf("=============================================\n");
+    }
+}
+
+void extractTrainFromFile()
+{
+    struct stack q;
+
+}
 int main()
 {
     extractUsersFromFile();

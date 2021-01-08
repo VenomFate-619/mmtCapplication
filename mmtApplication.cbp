@@ -34,7 +34,7 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="struct.h" />
+		<Unit filename="stack.h" />
 		<Unit filename="util.h" />
 		<Extensions>
 			<code_completion />
