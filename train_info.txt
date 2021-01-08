@@ -1,0 +1,2 @@
+1234=Amravati=Monday=Pune=100=08:00
+1234=Amrvati=Monday=Banglore=100=04:45
