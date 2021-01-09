@@ -1,55 +1,43 @@
 #include <stdio.h>
 #include <stdlib.h>
-struct stack
+
+struct User{
+    char email[30];
+    char name[30];
+    int _id;
+    char password[20];
+    char mobileNo[12];
+    struct User *next;
+}*head=NULL;
+
+struct Train
 {
+    int trainNo;
     int top;
-    int size;
-    int *a;
-};
-* create(struct stack *p,int seats)
-{
-    p->size=seats;
-    p->top=-1;
-    p->a=malloc(sizeof(int) * seats);
-    for(int i=0;i<seats;i++)
-    {
-        p->a[i]=i+1;
-    }
-    return p->a;
+    char source[30];
+    char destination[30];
+    char day[30];
+    char time[30];
+    int noOfAvailableSeats;
+    char *availableSeatsStack;
+    struct Train *next;
+}*headTrain=NULL;
 
-}
-void display(struct stack p)
+void createStack(struct Train *p)
 {
-    for(int i=p.top;i>=0;i--)
-    {
-        printf("%d ",p.a[i]);
-    }
-    printf('\n');
-}
-void push(struct stack *p,int x)
-{
-    if(p->top!=p->size-1)
-    {
-        p->top++;
-        p->a[p->top]=x;
-    }
-    else
-    {
-        printf("overflow\n");
-    }
-}
-int  pop(struct stack *p)
-{
-    int x=-1;
-    if(p->top!=-1)
-    {
-        x=p->a[p->top--];
-    }
-    else
-    {
-        printf("underflow\n");
-    }
-    return x;
-}
 
+  printf(" %d ",p->trainNo);
+}
+//void push(struct Train *p,char x)
+//{
+//    if(p->top!=p->noOfAvailableSeats-1)
+//    {
+//        p->top++;
+//        p->a[p->top]=x;
+//    }
+//    else
+//    {
+//        printf("overflow\n");
+//    }
+//}
 

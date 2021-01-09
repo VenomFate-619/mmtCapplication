@@ -2,7 +2,9 @@
 #define pf printf
 #define sf scanf
 
-//extern struct User;
+
+
+
 
 int emailVerify(char *email)
 {

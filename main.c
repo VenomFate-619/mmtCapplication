@@ -10,29 +10,9 @@
 #define sf scanf
 
 int bool=0;
-extern struct stack;
 
-struct  User
-{
-    char email[30];
-    char name[30];
-    int _id;
-    char password[20];
-    char mobileNo[12];
-    struct User *next;
-}*head=NULL;
-
-struct Train
-{
-    int trainNo;
-    char source[30];
-    char destination[30];
-    char day[30];
-    char time[30];
-    int noOfAvailableSeats;
-    int availableSeats[100];
-    struct Train *next;
-}*headTrain=NULL;
+extern struct User;
+extern struct Train;
 
 void menu();
 void registerUser();
@@ -90,23 +70,7 @@ void view()
     }
 }
 
-void addUser(struct User *newUser)
-{
-    struct User *q=head;
 
-    if(head==NULL)
-    {
-        head=newUser;
-    }
-    else
-    {
-        while(q->next!=NULL)
-        {
-            q=q->next;
-        }
-        q->next=newUser;
-    }
-}
 void addTrain(struct Train *newTrain)
 {
     struct Train *q=headTrain;
@@ -125,6 +89,23 @@ void addTrain(struct Train *newTrain)
     }
 }
 
+void addUser(struct User *newUser)
+{
+    struct User *q=head;
+
+    if(head==NULL)
+    {
+        head=newUser;
+    }
+    else
+    {
+        while(q->next!=NULL)
+        {
+            q=q->next;
+        }
+        q->next=newUser;
+    }
+}
 int findUserByEmail(char email[100])
 {
     struct User*u=head;
@@ -375,7 +356,7 @@ void viewTrainList()
     while(t!=NULL)
     {
         pf("\n=============================================\n");
-        pf("%d %s to %s on %s available seats are %d time is\n",t->trainNo,t->source,t->destination,t->day,t->noOfAvailableSeats,t->time);
+        pf("%d %s to %s on %s available seats are %d time is %s\n",t->trainNo,t->source,t->destination,t->day,t->noOfAvailableSeats,t->time);
         pf("=============================================\n");
         t=t->next;
     }
@@ -443,8 +424,10 @@ void extractTrainFromFile()
                 }
                 else if(temp==5)
                 {
+
                     time[strlen(time)+1]='\0';
                     time[strlen(time)]=read;
+
                 }
 
             }
@@ -462,11 +445,21 @@ void extractTrainFromFile()
                     strcpy(newTrain->source,source);
                     strcpy(newTrain->day,day);
                     strcpy(newTrain->destination,destination);
-                    newTrain->noOfAvailableSeats=atoi(availableSeats);
+                    pf(" %s ",availableSeats);
+                    //not working :(
+                    //newTrain->noOfAvailableSeats=(int)atoi(availableSeats);
+                    newTrain->noOfAvailableSeats=60;
+
                     strcpy(newTrain->time,time);
-                    newTrain->trainNo=atoi(trainNo);
+
+                    newTrain->trainNo=(int)atoi(trainNo);
                     newTrain->next=NULL;
+
+
+                    //    add to linked list
                     addTrain(newTrain);
+//                    Add to stack
+                    createStack(newTrain);
 //  reset value
                     temp=0;
                     time[0]='\0';
@@ -481,6 +474,10 @@ void extractTrainFromFile()
     }
     while(!feof(fz));
 
+
+//    stack create
+// waiting queue
+
 }
 
 
@@ -488,8 +485,8 @@ int main()
 {
     extractUsersFromFile();
     pf("hefjghjtkhgtr");
-  extractTrainFromFile();
+    extractTrainFromFile();
     viewTrainList();
-   //menu();
+  // menu();
     return 0;
 }
