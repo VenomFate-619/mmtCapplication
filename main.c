@@ -9,8 +9,8 @@
 #define pf printf
 #define sf scanf
 
-int bool=0;
 
+int bool=0;
 extern struct User;
 extern struct Train;
 
@@ -26,7 +26,7 @@ void menu()
     system("color 9");
     printf("\n\n\t\t\tMake my trip fast");
     printf("\n\n\n\t\t\t\xB2\xB2\xB2\xB2\xB2\xB2\xB2 WELCOME TO THE MAIN MENU \xB2\xB2\xB2\xB2\xB2\xB2\xB2");
-    printf("\n\n\t\t1.Create new account\n\t\t2.View \n\t\t3.Login\n\t\t4.Check the details of existing account\n\t\t5.Removing existing account\n\t\t6.View customer's list\n\t\t7.Exit\n\n\n\n\n\t\t Enter your choice:");
+    printf("\n\n\t\t1.Create new account\n\t\t2.View \n\t\t3.Login\n\t\t4.Check the details of existing account\n\t\t5.View Train info\n\t\t6.View customer's list\n\t\t7.Exit\n\n\n\n\n\t\t Enter your choice:");
     scanf("%d",&choice);
     switch(choice)
     {
@@ -42,12 +42,30 @@ void menu()
         login();
         system("cls");
         menu();
+         break;
     case 4:
-        viewTrainList();
+        view();
         system("cls");
         menu();
-    default:
+         break;
+    case 5:
+        viewTrainList();
+        pf("\nEnter 1 to return to main menu\n");
+        int s;
+        sf("%d",&s);
+        switch(s)
+        {
+        case 1:
+            menu();
+             break;
+        }
+         break;
+    case 0:
         exit(1);
+
+    default:
+        menu();
+         break;
     }
 }
 
@@ -433,7 +451,7 @@ void extractTrainFromFile()
             }
              else if(read=='\n' || !feof(fz))
                 {
-                    pf(" running  ");
+
 // adding it in linked list
                     struct Train *newTrain;
                      if(newTrain==NULL)
@@ -445,7 +463,7 @@ void extractTrainFromFile()
                     strcpy(newTrain->source,source);
                     strcpy(newTrain->day,day);
                     strcpy(newTrain->destination,destination);
-                    pf(" %s ",availableSeats);
+
                     //not working :(
                     //newTrain->noOfAvailableSeats=(int)atoi(availableSeats);
                     newTrain->noOfAvailableSeats=60;
@@ -454,13 +472,12 @@ void extractTrainFromFile()
 
                     newTrain->trainNo=(int)atoi(trainNo);
                     newTrain->next=NULL;
-
-
                     //    add to linked list
                     addTrain(newTrain);
 //                    Add to stack
                     createStack(newTrain);
-//  reset value
+//                     reset value
+                    //displayStack(newTrain);
                     temp=0;
                     time[0]='\0';
                     trainNo[0]='\0';
@@ -484,9 +501,10 @@ void extractTrainFromFile()
 int main()
 {
     extractUsersFromFile();
-    pf("hefjghjtkhgtr");
+    //pf("hefjghjtkhgtr");
     extractTrainFromFile();
-    viewTrainList();
-  // menu();
+
+    pf("\n");
+    menu();
     return 0;
 }
