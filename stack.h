@@ -1,3 +1,5 @@
+#ifndef stack.h
+#define stack.h
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,6 +11,7 @@ struct User{
     char mobileNo[12];
     struct User *next;
 }*head=NULL;
+
 
 struct Train
 {
@@ -23,14 +26,15 @@ struct Train
     int top;
 }*headTrain=NULL;
 
+
 void createStack(struct Train *p)
 {
     p->top=-1;
     p->availableSeatsStack=(char *)malloc(sizeof(char)*p->noOfAvailableSeats);
-    int i=0;
+    int i=1;
     for(;i<=p->noOfAvailableSeats;i++)
     {
-       push(p,i+1);
+       push(p,i);
     }
     p->availableSeatsStack[i]='\0';
 }
@@ -69,4 +73,5 @@ char pop(struct Train *p)
     }
     return x;
 }
+#endif // stack
 

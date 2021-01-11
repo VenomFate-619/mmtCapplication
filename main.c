@@ -4,13 +4,14 @@
 #include<conio.h>
 #include<ctype.h>
 #include<time.h>
+#include <windows.h>
 #include "util.h"
 #include "stack.h"
 #define pf printf
 #define sf scanf
 
 
-int bool=0;
+int bool=1;
 extern struct User;
 extern struct Train;
 
@@ -39,15 +40,26 @@ void menu()
         view();
         break;
     case 3:
+        if(bool==1)
+        {
+            pf("You are logged in ");
+            fordelay(2);
+            menu();
+        }
         login();
+        fordelay(2);
         system("cls");
         menu();
-         break;
+        break;
     case 4:
-        view();
-        system("cls");
+        if(bool==1)
+        {
+            view();
+        }
+        pf("Login or create a account ");
+        fordelay(2);
         menu();
-         break;
+        break;
     case 5:
         viewTrainList();
         pf("\nEnter 1 to return to main menu\n");
@@ -57,15 +69,27 @@ void menu()
         {
         case 1:
             menu();
-             break;
+            break;
         }
-         break;
+        break;
+    case 6:
+        if(bool==1)
+        {
+            trainReservation();
+        }
+        else
+        {
+            pf("Login or create a account ");
+            fordelay(2);
+            menu();
+        }
+        break;
     case 0:
         exit(1);
 
     default:
         menu();
-         break;
+        break;
     }
 }
 
@@ -155,10 +179,10 @@ int check(char *e,char *p)
     }
     else
     {
-        pf(" %s %s ",e,p);
+
         while(u!=NULL)
         {
-            if(strcmp(e,u->email)==0 || strcmp(p,u->password)==0)
+            if(strcmp(e,u->email)==0 && strcmp(p,u->password)==0)
             {
                 return 1;
             }
@@ -358,13 +382,12 @@ void login()
         pf("Email: ");
         sf("%s",userEmail);
         pf("Password: ");
-        sf("%s",userPassword);
+        //sf("%s",userPassword);
+        entryOfPassword(userPassword);
     }
     while(!check(userEmail,userPassword));
     bool=1;
-
 }
-
 
 
 void viewTrainList()
@@ -449,43 +472,43 @@ void extractTrainFromFile()
                 }
 
             }
-             else if(read=='\n' || !feof(fz))
-                {
+            else if(read=='\n' || !feof(fz))
+            {
 
 // adding it in linked list
-                    struct Train *newTrain;
-                     if(newTrain==NULL)
-                    {
+                struct Train *newTrain;
+                if(newTrain==NULL)
+                {
                     printf("Heap overflow!");
                     exit(1);
-                    }
-                    newTrain=(struct Train *)malloc(sizeof(struct Train));
-                    strcpy(newTrain->source,source);
-                    strcpy(newTrain->day,day);
-                    strcpy(newTrain->destination,destination);
-
-                    //not working :(
-                    //newTrain->noOfAvailableSeats=(int)atoi(availableSeats);
-                    newTrain->noOfAvailableSeats=60;
-
-                    strcpy(newTrain->time,time);
-
-                    newTrain->trainNo=(int)atoi(trainNo);
-                    newTrain->next=NULL;
-                    //    add to linked list
-                    addTrain(newTrain);
-//                    Add to stack
-                    createStack(newTrain);
-//                     reset value
-                    //displayStack(newTrain);
-                    temp=0;
-                    time[0]='\0';
-                    trainNo[0]='\0';
-                    source[0]='\0';
-                    destination[0]='\0';
-                    day[0]='\0';
-                    noOfAvailableSeats[0]='\0';
                 }
+                newTrain=(struct Train *)malloc(sizeof(struct Train));
+                strcpy(newTrain->source,source);
+                strcpy(newTrain->day,day);
+                strcpy(newTrain->destination,destination);
+
+                //not working :(
+                //newTrain->noOfAvailableSeats=(int)atoi(availableSeats);
+                newTrain->noOfAvailableSeats=60;
+
+                strcpy(newTrain->time,time);
+
+                newTrain->trainNo=(int)atoi(trainNo);
+                newTrain->next=NULL;
+                //    add to linked list
+                addTrain(newTrain);
+//                    Add to stack
+                createStack(newTrain);
+//                     reset value
+                //displayStack(newTrain);
+                temp=0;
+                time[0]='\0';
+                trainNo[0]='\0';
+                source[0]='\0';
+                destination[0]='\0';
+                day[0]='\0';
+                noOfAvailableSeats[0]='\0';
+            }
         }
 
     }
