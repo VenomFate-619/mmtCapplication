@@ -11,7 +11,7 @@
 #define sf scanf
 
 
-int bool=1;
+int bool=0;
 extern struct User;
 extern struct Train;
 
@@ -27,7 +27,7 @@ void menu()
     system("color 9");
     printf("\n\n\t\t\tMake my trip fast");
     printf("\n\n\n\t\t\t\xB2\xB2\xB2\xB2\xB2\xB2\xB2 WELCOME TO THE MAIN MENU \xB2\xB2\xB2\xB2\xB2\xB2\xB2");
-    printf("\n\n\t\t1.Create new account\n\t\t2.View \n\t\t3.Login\n\t\t4.Check the details of existing account\n\t\t5.View Train info\n\t\t6.View customer's list\n\t\t7.Exit\n\n\n\n\n\t\t Enter your choice:");
+    printf("\n\n\t\t1.Create new account\n\t\t2.Login \n\t\t3.Reserved a Train \n\t\t4.Check the details of existing account\n\t\t5.View Train info\n\t\t\t0.Exit\n\n\n\n\n\t\t Enter your choice:");
     scanf("%d",&choice);
     switch(choice)
     {
@@ -37,10 +37,7 @@ void menu()
         menu();
         break;
     case 2:
-        view();
-        break;
-    case 3:
-        if(bool==1)
+         if(bool==1)
         {
             pf("You are logged in ");
             fordelay(2);
@@ -50,6 +47,18 @@ void menu()
         fordelay(2);
         system("cls");
         menu();
+        break;
+    case 3:
+            if(bool==1)
+        {
+            trainReservation();
+        }
+        else
+        {
+            pf("Login or create a account ");
+            fordelay(2);
+            menu();
+        }
         break;
     case 4:
         if(bool==1)
@@ -72,18 +81,7 @@ void menu()
             break;
         }
         break;
-    case 6:
-        if(bool==1)
-        {
-            trainReservation();
-        }
-        else
-        {
-            pf("Login or create a account ");
-            fordelay(2);
-            menu();
-        }
-        break;
+
     case 0:
         exit(1);
 
